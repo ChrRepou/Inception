@@ -1,0 +1,29 @@
+services:
+  nginx:
+    build:
+      context: nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: on-failure
+  wordpress:
+    build:
+      context: wordpress
+    ports:
+      - '8080:80'
+    environment:
+      WORDPRESS_DB_HOST: database
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: Wordpress123#
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      - db
+    links:
+      - "db:database"
+    restart: on-failure
+  db:
+    build:
+      context: mariadb
+    ports:
+      - '3308:3306'
+    restart: on-failure
