@@ -1,29 +1,38 @@
 services:
   nginx:
+    container_name: nginx
     build:
       context: nginx
     ports:
-      - '80:80'
       - '443:443'
     restart: on-failure
+    depends_on: 
+      - wordpress
+    volumes: 
+      - wordpress:/var/www/html
+    networks:
+      - inception-net
   wordpress:
+    container_name: wordpress
     build:
       context: wordpress
-    ports:
-      - '8080:80'
-    environment:
-      WORDPRESS_DB_HOST: database
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: Wordpress123#
-      WORDPRESS_DB_NAME: wordpress
+    env_file:
+      - ./wordpress/env
     depends_on:
-      - db
-    links:
-      - "db:database"
+      - mariadb
     restart: on-failure
-  db:
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - inception-net
+  mariadb:
+    container_name: mariadb
     build:
       context: mariadb
-    ports:
-      - '3308:3306'
     restart: on-failure
+    env_file:
+      - ./mariadb/.env
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - inception-net

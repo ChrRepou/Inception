@@ -18,7 +18,7 @@ RUN nginx -t
 WORKDIR /var/www/html
 
 # Expose the nginx port
-EXPOSE 80 443
+EXPOSE 443
 
 # Set nginx as the default command
 CMD ["nginx", "-g", "daemon off;"]
