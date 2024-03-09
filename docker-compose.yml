@@ -17,7 +17,7 @@ services:
     build:
       context: wordpress
     env_file:
-      - ./wordpress/env
+      - ./wordpress/.env
     depends_on:
       - mariadb
     restart: on-failure
@@ -36,3 +36,10 @@ services:
       - mariadb:/var/lib/mysql
     networks:
       - inception-net
+
+networks:
+  inception-net:
+    driver: bridge
+volumes:
+  wordpress:
+  mariadb:
